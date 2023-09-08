@@ -45,6 +45,7 @@ def checkSpelling(word):
     else:
         return word.upper(), 'No matches!'
 
+
 out = ''
 prompt = ''
 # start main loop
