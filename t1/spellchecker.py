@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import json, os, difflib
+import json, os, difflib, operator
 import numpy as np
 
 
@@ -37,11 +37,31 @@ def distance(word, match):
     n = max(len(match), len(word))
     return (n - distances[-1, -1]) / n
 
+
+keyboard = [list('йцукенгшщзхъ'),
+            list('фывапролджэ'),
+            list(' ячсмитьбю')]
+
+# get approx keyboard distance
+def kbDistance(a, b):
+    x = [0, 0]
+    y = [0, 0]
+    for i, letter in enumerate([a, b]):
+        for j, row in enumerate(keyboard):
+            if letter in row:
+                x[i] = row.index(letter)
+                y[i] = j
+                break
+            elif j == 2 and letter not in row:
+                print(f'Non cyrillic charecter {letter}!')
+                return 0.1
+
+    return 1 - np.sqrt((x[1] - x[0]) ** 2 + (y[1] - y[0]) ** 2) / 12.37
+
 # read tokens
 with open('words.json') as f:
     tokens = json.load(f)['words']
 
-# print(tokens)
 alphabet = 'абвгдеёжзийклмнопрстуфчцчшщъыьэюя'
 
 # spell checker
@@ -57,28 +77,36 @@ def checkSpelling(word):
         for letter in alphabet:
             match = word[:i] + letter + word[i:]
             if match in tokens:
-                matches[match] = distance(word, match)
+                if i == 0:
+                    score = kbDistance(match[i], match[i+1])
+                elif i == len(match) - 1:
+                    score = kbDistance(match[i], match[i-1])
+                else:
+                    score = max(kbDistance(match[i], match[i-1]),
+                                kbDistance(match[i], match[i+1]))
+                matches[match] = round(score * distance(word, match), 2)
     #removing letter
     for i in range(len(word)):
         match = word[:i] + word[i+1:]
         if match in tokens:
-            matches[match] = distance(word, match)
+            matches[match] = round(distance(word, match) * .5, 2)
     #replace letter
     for i in range(len(word)):
         for letter in alphabet:
             match = word[:i] + letter + word[i+1:]
             if match in tokens:
-                matches[match] = distance(word, match)
+                score = kbDistance(word[i], letter) * distance(word, match)
+                matches[match] = round(score, 2)
     #swap two letters
     for i in range(len(word)-1):
         wordList = list(word)
         wordList[i], wordList[i+1] = wordList[i+1], wordList[i]
         match = "".join(wordList)
         if match in tokens:
-            matches[match] = distance(word, match)
+            matches[match] = round(distance(word, match) * .75, 2)
 
     if len(matches) > 0:
-        return max(matches, key=matches.get), dict(sorted(matches.items(), key=lambda item: item[1]))
+        return max(matches, key=matches.get), dict(sorted(matches.items(), key=operator.itemgetter(1),reverse=True))
     else:
         return word.upper(), 'No matches!'
 
