@@ -88,8 +88,17 @@ def checkSpelling(word):
     #removing letter
     for i in range(len(word)):
         match = word[:i] + word[i+1:]
+        letter = word[i]
         if match in tokens:
-            matches[match] = round(distance(word, match) * .5, 2)
+            if i == 0:
+                score = kbDistance(letter, match[i+1])
+            elif i >= len(match) - 2:
+                score = kbDistance(letter, match[i-1])
+            else:
+                score = max(kbDistance(letter, match[i+1]),
+                            kbDistance(letter, match[i-1]))
+
+            matches[match] = round(distance(word, match) * score, 2)
     #replace letter
     for i in range(len(word)):
         for letter in alphabet:
@@ -106,7 +115,8 @@ def checkSpelling(word):
             matches[match] = round(distance(word, match) * .75, 2)
 
     if len(matches) > 0:
-        return max(matches, key=matches.get), dict(sorted(matches.items(), key=operator.itemgetter(1),reverse=True))
+        return max(matches, key=matches.get), dict(sorted(matches.items(),
+                                                          key=operator.itemgetter(1),reverse=True))
     else:
         return word.upper(), 'No matches!'
 
