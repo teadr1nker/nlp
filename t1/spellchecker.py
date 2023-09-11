@@ -72,7 +72,7 @@ def checkSpelling(word):
 
     matches = {}
 
-    #adding letter
+    # adding letter
     for i in range(len(word)+1):
         for letter in alphabet:
             match = word[:i] + letter + word[i:]
@@ -99,14 +99,14 @@ def checkSpelling(word):
                             kbDistance(letter, match[i-1]))
 
             matches[match] = round(distance(word, match) * score, 2)
-    #replace letter
+    # replace letter
     for i in range(len(word)):
         for letter in alphabet:
             match = word[:i] + letter + word[i+1:]
             if match in tokens:
                 score = kbDistance(word[i], letter) * distance(word, match)
                 matches[match] = round(score, 2)
-    #swap two letters
+    # swap two letters
     for i in range(len(word)-1):
         wordList = list(word)
         wordList[i], wordList[i+1] = wordList[i+1], wordList[i]
@@ -116,7 +116,8 @@ def checkSpelling(word):
 
     if len(matches) > 0:
         return max(matches, key=matches.get), dict(sorted(matches.items(),
-                                                          key=operator.itemgetter(1),reverse=True))
+                                                          key=operator.itemgetter(1),
+                                                          reverse=True))
     else:
         return word.upper(), 'No matches!'
 
