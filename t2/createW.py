@@ -30,27 +30,25 @@ def load_vectors(fname, limit):
     return words, np.array(data, np.float32)
 
 
-limit = 1000
+limit = 50000
 tokensRu, ru = load_vectors('vectors/cc.ru.300.vec', limit)
 tokensEn, en = load_vectors('vectors/cc.en.300.vec', limit)
 
-U, S, Vh = np.linalg.svd(np.dot(en, ru.T))
+U, S, Vh = np.linalg.svd(np.dot(en.T, ru))
 
 W = np.dot(U, Vh)
 
-P = np.dot(W, ru)
-
+# print(en - np.dot(ru, W))
+quit()
 enTree = spatial.KDTree(en)
 dictionary = {}
-
-print(test2)
-for i in range(limit):
-    wordRu = tokensRu[i]
-    # closest = enTree.query(P[i])
-    wordEn = tokensEn[np.where(test2 == i)]
-    # print(closest[1], i)
-    dictionary[wordRu] = wordEn
+for i, word in enumerate(tokensRu):
+    # find closest vector
+    vect = np.dot(ru[i], W)
+    closest = enTree.query(vect)
+    dictionary[word.lower()] = tokensEn[closest[1]].lower()
 
 with open('dictionary.json', 'w') as f:
     f.write(json.dumps(dictionary))
+
 
