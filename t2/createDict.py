@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import json
-import fasttext
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -12,19 +11,21 @@ def fix(strlist):
     return [float(x) for x in strlist.split(', ')]
 
 
-with open('serb.json') as f:
-    serb = json.load(f)
+with open('bel.json') as f:
+    bel = json.load(f)
 
 with open('rus.json') as f:
     rus = json.load(f)
 
-size = min(len(serb), len(rus))
+size = min(len(bel), len(rus))
+
+print(f'dataset size: {size}')
 
 ruWords = [key for key in rus]
-srWords = [key for key in serb]
+beWords = [key for key in bel]
 
 R = np.array([fix(rus[key]) for key in rus], np.float32)[:size]
-P = np.array([fix(serb[key]) for key in serb], np.float32)[:size]
+P = np.array([fix(bel[key]) for key in bel], np.float32)[:size]
 
 U, S, Vh = np.linalg.svd(np.dot(P.T, R))
 W = np.dot(U, Vh)
@@ -38,7 +39,7 @@ for i in range(size):
 
     similarities = cosine_similarity(ruVec.reshape(1, -1), P)
     similar = np.argmax(similarities)
-    dictionary[word.lower()] = srWords[similar].lower()
+    dictionary[word.lower()] = beWords[similar].lower()
 
     print(i, similar)
 
