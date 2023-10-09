@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import json
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 from scipy import spatial
 
 
@@ -51,4 +50,3 @@ for i in range(size):
 
 with open('dictionary.json', 'w') as f:
     f.write(json.dumps(dictionary))
-

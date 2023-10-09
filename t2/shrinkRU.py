@@ -12,6 +12,3 @@ ru = {word: str(list(modelRU.get_word_vector(word))) for word in rusWords}
 
 with open('rus.json', 'w') as f:
     f.write(json.dumps(ru))
-
-
-
