@@ -2,6 +2,7 @@
 import json
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from scipy import spatial
 
 
 def fix(strlist):
@@ -27,20 +28,25 @@ beWords = [key for key in bel]
 R = np.array([fix(rus[key]) for key in rus], np.float32)[:size]
 P = np.array([fix(bel[key]) for key in bel], np.float32)[:size]
 
+print(R.shape, P.shape)
 U, S, Vh = np.linalg.svd(np.dot(P.T, R))
 W = np.dot(U, Vh)
 
+print(f'W shape {W.shape}')
 dictionary = {}
+tree = spatial.KDTree(P)
 
 for i in range(size):
     word = ruWords[i]
     ruVec = R[i]
     ruVec = np.dot(W, ruVec)
 
-    similarities = cosine_similarity(ruVec.reshape(1, -1), P)
-    similar = np.argmax(similarities)
-    dictionary[word.lower()] = beWords[similar].lower()
+    # similarities = cosine_similarity(ruVec.reshape(1, -1), P)
+    # similar = np.argmax(similarities)
+    #
 
+    similar = tree.query(ruVec)[1]
+    dictionary[word.lower()] = beWords[similar].lower()
     print(i, similar)
 
 with open('dictionary.json', 'w') as f:
