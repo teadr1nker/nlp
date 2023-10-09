@@ -6,6 +6,8 @@ import re
 with open('dictionary.json') as f:
     dictionary = json.load(f)
 
+print(dictionary)
+quit()
 path = 'Маша и медведь.txt'
 
 with open(path, 'r') as f:
