@@ -6,7 +6,7 @@ import re
 with open('dictionary.json') as f:
     dictionary = json.load(f)
 
-print(dictionary)
+# print(dictionary)
 path = 'Зайкина избушка.txt'
 
 with open(path, 'r') as f:
@@ -16,7 +16,7 @@ words = re.split(' |,|!|\?|\.', text)
 translated = []
 
 limit = len(words)
-print(words[:limit])
+#print(words[:limit])
 for word in words:
     if word:
         if word.lower() in dictionary:
@@ -28,9 +28,10 @@ for word in words:
             break
     limit -= 1
 
-for word in words[:limit]:
-    print(word, end=" ")
-print()
+for word in words:
+    if word:
+        print(str(word), end=" ")
+print('\n\n')
 
 for word in translated:
     print(word, end=" ")
