@@ -4,6 +4,7 @@ import numpy as np
 from scipy import spatial
 from sklearn.metrics.pairwise import cosine_similarity
 
+
 def fix(strlist):
     strlist = strlist.replace('[', '')
     strlist = strlist.replace(']', '')

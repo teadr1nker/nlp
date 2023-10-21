@@ -12,5 +12,3 @@ be = {word: str(list(modelBE.get_word_vector(word))) for word in belWords}
 
 with open('bel.json', 'w') as f:
     f.write(json.dumps(be))
-
-

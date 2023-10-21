@@ -5,7 +5,8 @@ import logging
 import nltk
 nltk.download('punkt')
 
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s',
+                    level=logging.INFO)
 
 print(f'Reading dataset {datetime.now()}')
 with open('bigText.txt', 'r') as f:
@@ -29,7 +30,8 @@ print(f'Building vocab {datetime.now()}')
 model.build_vocab(sentences, progress_per=10000)
 
 print(f'Training Model {datetime.now()}')
-model.train(sentences, total_examples=model.corpus_count, epochs=2, report_delay=1)
+model.train(sentences, total_examples=model.corpus_count,
+            epochs=2, report_delay=1)
 
 model.init_sims(replace=True)
 

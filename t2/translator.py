@@ -7,16 +7,17 @@ with open('dictionary.json') as f:
     dictionary = json.load(f)
 
 # print(dictionary)
-path = 'Зайкина избушка.txt'
+path = 'Маша и медведь.txt'
 
 with open(path, 'r') as f:
     text = f.read().replace('\n', ' ')
 
-words = re.split(' |,|!|\?|\.', text)
+words = re.split(' |,|!|\?|\.|:', text)
 translated = []
 
 limit = len(words)
-#print(words[:limit])
+# print(words[:limit])
+
 for word in words:
     if word:
         if word.lower() in dictionary:
