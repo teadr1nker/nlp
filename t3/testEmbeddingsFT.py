@@ -1,7 +1,7 @@
 #!/usr/bin/python3
-from gensim.models import Word2Vec
+from gensim.models import FastText
 
-model = Word2Vec.load('mymodelFT')
+model = FastText.load('mymodelFT')
 
 print(model.wv.most_similar(positive=["Россия"]))
 print(model.wv.most_similar(positive=["человек"]))
