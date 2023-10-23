@@ -3,7 +3,8 @@ import gensim
 
 stream = open('vectors/model.txt', 'r')
 
-model = gensim.models.KeyedVectors.load_word2vec_format('vectors/model.bin', binary=True)
+model = gensim.models.KeyedVectors.load_word2vec_format('vectors/model.bin',
+                                                        binary=True)
 print('Loaded model')
 
 print(model.most_similar('россия_PROPN'))
