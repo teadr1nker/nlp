@@ -18,4 +18,3 @@ def oneHotEncodingRus(word, size):
 
 if __name__ == '__main__':
     print(oneHotEncodingRus('тест', 6))
-

@@ -6,8 +6,8 @@ import json
 
 from keras.models import Sequential
 from keras.layers import Dense, SimpleRNN
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error, confusion_matrix
+# from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import confusion_matrix
 
 data = pd.read_csv('surnames.csv')
 
@@ -43,7 +43,7 @@ model.add(Dense(128))
 model.add(Dense(len(nationalities), activation='softmax'))
 model.compile(loss='mean_squared_error')
 
-model.fit(X, Y, epochs=48, batch_size=16)
+model.fit(X, Y, epochs=32, batch_size=16)
 
 print(model.evaluate(X, Y))
 model.save('mymodel')
@@ -54,9 +54,9 @@ with open('settings.json', 'w') as f:
     json.dump(settings, f)
 
 # Confusion matrix
-
 YPred = [nationalities[np.argmax(y)] for y in model.predict(X)]
-result = confusion_matrix(YPred, data['nationality'].values, normalize='pred', labels=nationalities)
+result = confusion_matrix(YPred, data['nationality'].values,
+                          normalize='pred', labels=nationalities)
 
 matrixcsv = ''
 matrixcsv += ','.join(['error']+nationalities) + '\n'
@@ -66,4 +66,3 @@ for i in range(len(nationalities)):
 
 with open('confusion.csv', 'w') as f:
     f.write(matrixcsv)
-
