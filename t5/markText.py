@@ -21,7 +21,10 @@ filteredSentences = []
 
 # filter tokens only for cyrillic words
 for sentence in sentences:
-    filteredSentences.append([w.lower() for w in filter(r.match, sentence)])
+    filteredSentences.append([w.lower() for w in filter(r.match, sentence) if len(w) <= 15])
+
+filteredSentences = [x for x in filteredSentences if len(x) >= 3]
+filteredSentences = [x for x in filteredSentences if len(x) <= 20]
 
 dictionary = {'sentences': [], 'tags': []}
 
